@@ -27,6 +27,7 @@
         <range_and_bearing   implementation="medium" medium="rab"
                              show_rays="true" noise_std_dev="0" />
         <positioning         implementation="default" />
+        <kheperaiv_light   implementation="rot_z_only" />
       </sensors>
       <params>
         <wheel_turning hard_turn_angle_threshold="90"
@@ -44,10 +45,10 @@
   <arena size="5, 5, 1" center="0,0,0.5">
 
     <light id="light"
-           position="1.5,0,0"
+           position="1.5,0,0.15"
            orientation="0,0,0"
            color="yellow"
-           intensity="3.0"
+           intensity="5.0"
            medium="light" />
 
     <box id="wall_north" size="4,0.1,0.5" movable="false">
@@ -75,7 +76,7 @@
     <distribute>
       <position method="uniform" min="-2,-2,0" max="2,2,0" />
       <orientation method="gaussian" mean="0,0,0" std_dev="360,0,0" />
-      <entity quantity="10" max_trials="100">
+      <entity quantity="20" max_trials="100">
         <kheperaiv id="kiv">
           <controller config="CollectiveTransport" />
         </kheperaiv>
@@ -87,7 +88,7 @@
       <position method="uniform" min="-2,-2,0" max="2,2,0" />
       <orientation method="uniform" min="0,0,0" max="360,0,0" />
       <entity quantity="1" max_trials="100">
-        <box id="b" size="0.3,0.3,0.2" movable="true" mass="2"/>
+        <box id="b" size="0.5,0.5,0.3" movable="true" mass="2"/>
         <body position="0,0,0.5" orientation="0,0,0" />
         <leds medium="id_of_led_medium">
             <led offset=" 0.15, 0.15,0.15" anchor="origin" color="white" />
