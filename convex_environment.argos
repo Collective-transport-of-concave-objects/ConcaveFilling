@@ -80,15 +80,20 @@
       <position method="uniform" min="-2,-2,0" max="2,2,0" />
       <orientation method="uniform" min="0,0,0" max="360,0,0" />
       <entity quantity="1" max_trials="100">
-        <box id="b" size="0.3,0.3,0.2" movable="true" mass="2"/>
-        <body position="0,0,0.5" orientation="0,0,0" />
-        <leds medium="id_of_led_medium">
-            <led offset=" 0.15, 0.15,0.15" anchor="origin" color="white" />
-            <led offset="-0.15, 0.15,0"    anchor="origin" color="red"   />
+        <box id="b" size="0.3,0.3,0.2" movable="true" mass="2">
+          <body position="0,0,0" orientation="0,0,0" />
+          <leds medium="id_of_led_medium">
+            <led offset=" 0.15, 0.15,0.2" anchor="origin" color="blue" />
+            <led offset=" -0.15, 0.15,0.2" anchor="origin" color="blue" />
+            <led offset=" 0.15, -0.15,0.2" anchor="origin" color="blue" />
+            <led offset=" -0.15, -0.15,0.2" anchor="origin" color="blue" />
+            <led offset="-0.15, 0.15,0"    anchor="origin" color="blue"  />
             <led offset=" 0.15, 0.15,0"    anchor="origin" color="blue"  />
-            <led offset=" 0.15,-0.15,0"    anchor="origin" color="green" />
-        </leds>
+            <led offset=" 0.15,-0.15,0"    anchor="origin" color="blue" />
+            <led offset="-0.15, -0.15,0"    anchor="origin" color="blue"  />
 
+          </leds>
+        </box>
       </entity>
     </distribute>
 
@@ -118,6 +123,7 @@
   <media>
     <range_and_bearing id="rab" />
     <led id="leds" />
+    <led id="id_of_led_medium" />
   </media>
 
   <!-- ****************** -->
