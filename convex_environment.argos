@@ -91,7 +91,6 @@
             <led offset=" 0.15, 0.15,0"    anchor="origin" color="blue"  />
             <led offset=" 0.15,-0.15,0"    anchor="origin" color="blue" />
             <led offset="-0.15, -0.15,0"    anchor="origin" color="blue"  />
-
           </leds>
         </box>
       </entity>
