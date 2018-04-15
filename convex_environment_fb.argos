@@ -1,0 +1,148 @@
+<?xml version="1.0" ?>
+<argos-configuration>
+
+  <!-- ************************* -->
+  <!-- * General configuration * -->
+  <!-- ************************* -->
+  <framework>
+    <system threads="0" />
+    <experiment length="0"
+                ticks_per_second="10"
+                random_seed="124" />
+  </framework>
+
+  <!-- *************** -->
+  <!-- * Controllers * -->
+  <!-- *************** -->
+  <controllers>
+
+    <buzz_footbot_controller id="CollectiveTransport">
+                                 <!-- library="build/controllers/footbot_gripping/libfootbot_gripping"> -->
+      <actuators>
+        <differential_steering implementation="default" />
+        <footbot_gripper       implementation="default" />
+        <leds                  implementation="default" medium="leds" />
+        <range_and_bearing     implementation="default" />
+      </actuators>
+      <sensors>
+        <!-- <kheperaiv_proximity implementation="default" show_rays="true" /> -->
+        <range_and_bearing   implementation="medium" medium="rab"
+                             show_rays="true" noise_std_dev="0" />
+        <positioning         implementation="default" />
+        <footbot_light                       implementation="rot_z_only" show_rays="true" />
+        <!-- <colored_blob_omnidirectional_camera implementation="rot_z_only" medium="leds" show_rays="true" /> -->
+        <colored_blob_perspective_camera implementation="rot_z_only"
+                                 medium="leds"
+                                 show_rays="true" />
+      </sensors>
+      <params>
+        <wheel_turning hard_turn_angle_threshold="90"
+                       soft_turn_angle_threshold="70"
+                       no_turn_angle_threshold="10"
+                       max_speed="10" />
+        <flocking target_distance="75"
+                  gain="1000"
+                  exponent="2" />
+      </params>
+    </buzz_footbot_controller>
+
+  </controllers>
+
+  <!-- *********************** -->
+  <!-- * Arena configuration * -->
+  <!-- *********************** -->
+  <arena size="5,5,1" center="0,0,0.5">
+
+    <light id="light"
+           position="1.5,0,0.15"
+           orientation="0,0,0"
+           color="yellow"
+           intensity="5.0"
+           medium="light" />
+
+    <box id="wall_north" size="4,0.1,0.5" movable="false">
+     <body position="0,2,0" orientation="0,0,0" />
+    </box>
+    <box id="wall_south" size="4,0.1,0.5" movable="false">
+     <body position="0,-2,0" orientation="0,0,0" />
+    </box>
+    <box id="wall_east" size="0.1,4,0.5" movable="false">
+     <body position="2,0,0" orientation="0,0,0" />
+    </box>
+    <box id="wall_west" size="0.1,4,0.5" movable="false">
+     <body position="-2,0,0" orientation="0,0,0" />
+    </box>
+
+    <!-- <foot-bot id="f">
+      <body position="0,0,0" orientation="0,0,0" />
+      <controller config="fgc" />
+    </foot-bot> -->
+
+    <!-- To use the cylinder as a grippable object, it is enough to
+         set its 'movable' attribute to 'true', and define its
+         mass (in kg).
+    -->
+    <!-- <cylinder id="c" height="0.2" radius="0.1" mass="0.1" movable="true">
+      <body position="0.5,0,0" orientation="0,0,0" />
+    </cylinder> -->
+
+
+    <distribute>
+     <position method="uniform" min="4,4,0" max="5,5,0" />
+     <orientation method="gaussian" mean="0,0,0" std_dev="360,0,0" />
+     <entity quantity="10" max_trials="100">
+       <foot-bot id="fb" omnidirectional_camera_aperture="80">
+         <controller config="CollectiveTransport" />
+       </foot-bot>
+     </entity>
+    </distribute>
+
+    <distribute>
+      <position method="uniform" min="-2,-2,0" max="2,2,0" />
+      <orientation method="uniform" min="0,0,0" max="360,0,0" />
+      <entity quantity="1" max_trials="100">
+        <box id="b" size="0.5,0.5,0.3" movable="true" mass="2"/>
+        <body position="0,0,0.5" orientation="0,0,0" />
+        <leds medium="id_of_led_medium">
+            <led offset=" 0.15, 0.15,0.15" anchor="origin" color="white" />
+            <led offset="-0.15, 0.15,0"    anchor="origin" color="red"   />
+            <led offset=" 0.15, 0.15,0"    anchor="origin" color="blue"  />
+            <led offset=" 0.15,-0.15,0"    anchor="origin" color="green" />
+        </leds>
+
+      </entity>
+    </distribute>
+
+   </arena>
+  <!-- ******************* -->
+  <!-- * Physics engines * -->
+  <!-- ******************* -->
+  <physics_engines>
+    <dynamics2d id="dyn2d" />
+  </physics_engines>
+
+  <!-- ********* -->
+  <!-- * Media * -->
+  <!-- ********* -->
+  <media>
+    <range_and_bearing id="rab" />
+    <led id="leds" />
+    <led id="light" />
+  <media />
+
+  <!-- ****************** -->
+  <!-- * Visualization * -->
+  <!-- ****************** -->
+  <visualization>
+    <qt-opengl>
+      <user_functions label="buzz_qt" />
+      <camera>
+        <placement idx="0"
+                   position="0.251795,1.03178,0.515305"
+                   look_at="0.233654,0.0876767,0.186165"
+                   lens_focal_length="20" />
+      </camera>
+    </qt-opengl>
+  </visualization>
+
+</argos-configuration>
