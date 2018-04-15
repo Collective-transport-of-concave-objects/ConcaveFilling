@@ -16,7 +16,7 @@
   <!-- *************** -->
   <controllers>
 
-    <buzz_footbot_controller id="CollectiveTransport">
+    <footbot_flocking_controller id="CollectiveTransport">
                                  <!-- library="build/controllers/footbot_gripping/libfootbot_gripping"> -->
       <actuators>
         <differential_steering implementation="default" />
@@ -44,7 +44,7 @@
                   gain="1000"
                   exponent="2" />
       </params>
-    </buzz_footbot_controller>
+    </footbot_flocking_controller>
 
   </controllers>
 
@@ -128,7 +128,7 @@
     <range_and_bearing id="rab" />
     <led id="leds" />
     <led id="light" />
-  <media />
+  </media>
 
   <!-- ****************** -->
   <!-- * Visualization * -->
