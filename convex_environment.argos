@@ -16,8 +16,7 @@
   <!-- *************** -->
   <controllers>
 
-    <footbot_flocking_controller id="CollectiveTransport">
-                                 <!-- library="build/controllers/footbot_gripping/libfootbot_gripping"> -->
+    <buzz_controller_kheperaiv id="obsAvoid">
       <actuators>
         <differential_steering implementation="default" />
         <footbot_gripper       implementation="default" />
@@ -29,11 +28,6 @@
         <range_and_bearing   implementation="medium" medium="rab"
                              show_rays="true" noise_std_dev="0" />
         <positioning         implementation="default" />
-        <footbot_light                       implementation="rot_z_only" show_rays="true" />
-        <!-- <colored_blob_omnidirectional_camera implementation="rot_z_only" medium="leds" show_rays="true" /> -->
-        <colored_blob_perspective_camera implementation="rot_z_only"
-                                 medium="leds"
-                                 show_rays="true" />
       </sensors>
       <params>
         <wheel_turning hard_turn_angle_threshold="90"
@@ -52,13 +46,6 @@
   <!-- * Arena configuration * -->
   <!-- *********************** -->
   <arena size="5,5,1" center="0,0,0.5">
-
-    <light id="light"
-           position="1.5,0,0.15"
-           orientation="0,0,0"
-           color="yellow"
-           intensity="5.0"
-           medium="light" />
 
     <box id="wall_north" size="4,0.1,0.5" movable="false">
      <body position="0,2,0" orientation="0,0,0" />
@@ -88,28 +75,32 @@
 
 
     <distribute>
-     <position method="uniform" min="4,4,0" max="5,5,0" />
-     <orientation method="gaussian" mean="0,0,0" std_dev="360,0,0" />
-     <entity quantity="10" max_trials="100">
-       <foot-bot id="fb" omnidirectional_camera_aperture="80">
-         <controller config="CollectiveTransport" />
-       </foot-bot>
-     </entity>
+      <position method="uniform" min="-2,-2,0" max="2,2,0" />
+      <orientation method="gaussian" mean="0,0,0" std_dev="360,0,0" />
+      <entity quantity="10" max_trials="100">
+        <kheperaiv id="kiv">
+          <controller config="obsAvoid" />
+        </kheperaiv>
+      </entity>
     </distribute>
 
     <distribute>
       <position method="uniform" min="-2,-2,0" max="2,2,0" />
       <orientation method="uniform" min="0,0,0" max="360,0,0" />
       <entity quantity="1" max_trials="100">
-        <box id="b" size="0.5,0.5,0.3" movable="true" mass="2"/>
-        <body position="0,0,0.5" orientation="0,0,0" />
-        <leds medium="id_of_led_medium">
-            <led offset=" 0.15, 0.15,0.15" anchor="origin" color="white" />
-            <led offset="-0.15, 0.15,0"    anchor="origin" color="red"   />
+        <box id="b" size="0.3,0.3,0.2" movable="true" mass="2">
+          <body position="0,0,0" orientation="0,0,0" />
+          <leds medium="id_of_led_medium">
+            <led offset=" 0.15, 0.15,0.2" anchor="origin" color="blue" />
+            <led offset=" -0.15, 0.15,0.2" anchor="origin" color="blue" />
+            <led offset=" 0.15, -0.15,0.2" anchor="origin" color="blue" />
+            <led offset=" -0.15, -0.15,0.2" anchor="origin" color="blue" />
+            <led offset="-0.15, 0.15,0"    anchor="origin" color="blue"  />
             <led offset=" 0.15, 0.15,0"    anchor="origin" color="blue"  />
-            <led offset=" 0.15,-0.15,0"    anchor="origin" color="green" />
-        </leds>
-
+            <led offset=" 0.15,-0.15,0"    anchor="origin" color="blue" />
+            <led offset="-0.15, -0.15,0"    anchor="origin" color="blue"  />
+          </leds>
+        </box>
       </entity>
     </distribute>
 
@@ -127,7 +118,7 @@
   <media>
     <range_and_bearing id="rab" />
     <led id="leds" />
-    <led id="light" />
+    <led id="id_of_led_medium" />
   </media>
 
   <!-- ****************** -->
