@@ -16,24 +16,21 @@
   <!-- *************** -->
   <controllers>
 
-    <footbot_flocking_controller id="CollectiveTransport">
-                                 <!-- library="build/controllers/footbot_gripping/libfootbot_gripping"> -->
+    <footbot_flocking_controller id="CollectiveTransport" library="controllers/footbot_flocking/libfootbot_flocking">
       <actuators>
         <differential_steering implementation="default" />
         <footbot_gripper       implementation="default" />
         <leds                  implementation="default" medium="leds" />
-        <range_and_bearing     implementation="default" />
+        <!-- <range_and_bearing     implementation="default" /> -->
       </actuators>
       <sensors>
         <footbot_proximity   implementation="default" show_rays="false" />
-        <range_and_bearing   implementation="medium" medium="rab"
-                             show_rays="true" noise_std_dev="0" />
+        <!-- <range_and_bearing   implementation="medium" medium="rab" -->
+                             <!-- show_rays="true" noise_std_dev="0" /> -->
         <positioning         implementation="default" />
         <footbot_light       implementation="rot_z_only" show_rays="true" />
-        <!-- <colored_blob_omnidirectional_camera implementation="rot_z_only" medium="leds" show_rays="true" /> -->
-        <colored_blob_perspective_camera implementation="rot_z_only"
-                                 medium="leds"
-                                 show_rays="true" />
+        <colored_blob_omnidirectional_camera implementation="rot_z_only" medium="leds" show_rays="true" />
+        <colored_blob_omnidirectional_camera id="cam" implementation="rot_z_only" medium="leds" show_rays="true" />
       </sensors>
       <params>
         <wheel_turning hard_turn_angle_threshold="90"
@@ -73,10 +70,10 @@
      <body position="-2,0,0" orientation="0,0,0" />
     </box>
 
-    <!-- <foot-bot id="f">
+    <foot-bot id="fb">
       <body position="0,0,0" orientation="0,0,0" />
-      <controller config="fgc" />
-    </foot-bot> -->
+      <controller config="CollectiveTransport" />
+    </foot-bot>
 
     <!-- To use the cylinder as a grippable object, it is enough to
          set its 'movable' attribute to 'true', and define its
@@ -91,7 +88,8 @@
      <position method="uniform" min="4,4,0" max="5,5,0" />
      <orientation method="gaussian" mean="0,0,0" std_dev="360,0,0" />
      <entity quantity="10" max_trials="100">
-       <foot-bot id="fb" omnidirectional_camera_aperture="80">
+       <foot-bot id="fb" > <!--omnidirectional_camera_aperture="80" -->
+         <body position="0,0,0" orientation="0,0,0" />
          <controller config="CollectiveTransport" />
        </foot-bot>
      </entity>
@@ -198,10 +196,10 @@
   <!-- * Media * -->
   <!-- ********* -->
   <media>
-    <range_and_bearing id="rab" />
+    <!-- <range_and_bearing id="rab" /> -->
     <led id="leds" />
     <led id="light" />
-    <colored_blob_perspective_camera id="leds" />
+    <!-- <colored_blob_omnidirectional_camera id="cam" /> -->
   </media>
 
   <!-- ****************** -->
@@ -209,7 +207,7 @@
   <!-- ****************** -->
   <visualization>
     <qt-opengl>
-      <user_functions label="buzz_qt" />
+      <!-- <user_functions label="buzz_qt" /> -->
       <camera>
         <placement idx="0"
                    position="0.251795,1.03178,0.515305"
