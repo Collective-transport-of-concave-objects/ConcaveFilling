@@ -25,11 +25,11 @@
         <range_and_bearing     implementation="default" />
       </actuators>
       <sensors>
-        <!-- <kheperaiv_proximity implementation="default" show_rays="true" /> -->
+        <footbot_proximity   implementation="default" show_rays="false" />
         <range_and_bearing   implementation="medium" medium="rab"
                              show_rays="true" noise_std_dev="0" />
         <positioning         implementation="default" />
-        <footbot_light                       implementation="rot_z_only" show_rays="true" />
+        <footbot_light       implementation="rot_z_only" show_rays="true" />
         <!-- <colored_blob_omnidirectional_camera implementation="rot_z_only" medium="leds" show_rays="true" /> -->
         <colored_blob_perspective_camera implementation="rot_z_only"
                                  medium="leds"
@@ -128,6 +128,7 @@
     <range_and_bearing id="rab" />
     <led id="leds" />
     <led id="light" />
+    <colored_blob_perspective_camera id="leds" />
   </media>
 
   <!-- ****************** -->
