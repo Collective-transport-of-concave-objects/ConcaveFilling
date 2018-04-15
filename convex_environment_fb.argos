@@ -69,12 +69,16 @@
     <box id="wall_west" size="0.1,4,0.5" movable="false">
      <body position="-2,0,0" orientation="0,0,0" />
     </box>
-
+<distribute>
+	<position method="uniform" min="-2,-2,0" max="2,2,0" />
+	<orientation method="uniform" min="0,0,0" max="360,0,0" />
+	<entity quantity="10" max_trials="100">
     <foot-bot id="fb">
       <body position="0,0,0" orientation="0,0,0" />
       <controller config="CollectiveTransport" />
     </foot-bot>
-
+</entity>
+</distribute>
     <!-- To use the cylinder as a grippable object, it is enough to
          set its 'movable' attribute to 'true', and define its
          mass (in kg).
@@ -83,17 +87,16 @@
       <body position="0.5,0,0" orientation="0,0,0" />
     </cylinder> -->
 
-
+<!-- 
     <distribute>
      <position method="uniform" min="4,4,0" max="5,5,0" />
      <orientation method="gaussian" mean="0,0,0" std_dev="360,0,0" />
-     <entity quantity="10" max_trials="100">
-       <foot-bot id="fb" > <!--omnidirectional_camera_aperture="80" -->
-         <body position="0,0,0" orientation="0,0,0" />
+     <entity quantity="0" max_trials="100">
+       <foot-bot id="fb" omnidirectional_camera_aperture="80" >
          <controller config="CollectiveTransport" />
        </foot-bot>
      </entity>
-    </distribute>
+    </distribute> -->
 
     <distribute>
       <position method="uniform" min="-2,-2,0" max="2,2,0" />
