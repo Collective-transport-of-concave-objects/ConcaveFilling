@@ -1,0 +1,67 @@
+### BUZZ FUNCTIONS ##
+function init() {
+}
+# function for setting 2D vector from length and angle
+function vec2_new_polar(length, angle) {
+   var vec2 = { .x = length * math.cos(angle) , .y = length * math.sin(angle)}
+   return vec2
+}
+# function for summing the 8 vectors of proximity sensors
+function vec2_sum(v1, v2, v3, v4, v5, v6, v7, v8) {
+   v1.x = v1.x + v2.x + v3.x + v4.x + v5.x + v6.x + v7.x + v8.x
+   v1.y = v1.y + v2.y + v3.y + v4.y + v5.y + v6.y + v7.y + v8.y
+	 return v1
+}
+# function for finding angle of vector
+function vec2_angle(v) {
+   return math.atan(v.y, v.x)
+}
+
+function step() {
+
+#finding vectors for all 8 proximity sensors
+V0 = vec2_new_polar(proximity[0].value , proximity[0].angle)
+V1 = vec2_new_polar(proximity[1].value , proximity[1].angle)
+V2 = vec2_new_polar(proximity[2].value , proximity[2].angle)
+V3 = vec2_new_polar(proximity[3].value , proximity[3].angle)
+V4 = vec2_new_polar(proximity[4].value , proximity[4].angle)
+V5 = vec2_new_polar(proximity[5].value , proximity[5].angle)
+V6 = vec2_new_polar(proximity[6].value , proximity[6].angle)
+V7 = vec2_new_polar(proximity[7].value , proximity[7].angle)
+
+#The resultant vector
+V_Resultant = vec2_sum(V0,V1,V2,V3,V4,V5,V6,V7)
+
+#Angle of the resultant vector
+V_R_angle = vec2_angle(V_Resultant)
+
+#Length of resultant vector
+V_R_length = math.sqrt((V_Resultant.y)^2 + (V_Resultant.x)^2)
+
+#threshold
+t = 0.5
+
+#No obstacle ahead - keep going straight
+if((V_R_length < t)) {
+set_wheels(20.0, 20.0)
+}
+
+# Obstacle straight ahead - Turn right (Could have programmed to turn left too)
+if((V_R_length > t) and (V_R_angle == 0)) {
+set_wheels(0.0, 20.0)
+}
+
+# Obstacle at front left - Turn right!
+if((V_R_angle > 0) and (V_R_angle <= 1.57)) {
+set_wheels(0.0, 20.0)
+}
+
+# Obstacle at front right - Turn left!
+if((V_R_angle >= -1.57) and (V_R_angle < 0)) {
+set_wheels(20.0, 0.0)
+}
+}
+function reset() {
+}
+function destroy() {
+}
