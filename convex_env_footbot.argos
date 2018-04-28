@@ -16,7 +16,8 @@
   <!-- *************** -->
   <controllers>
 
-    <buzz_controller_footbot id="CollectiveTransport">
+    <footbot_gripping_controller id="CollectiveTransport"
+        library="controllers/footbot_gripping/libfootbot_gripping">>
       <actuators>
         <differential_steering implementation="default" />
         <footbot_gripper       implementation="default" />
@@ -28,8 +29,8 @@
         <range_and_bearing   implementation="medium" medium="rab"
                              show_rays="true" noise_std_dev="0" />
         <positioning         implementation="default" />
-        <footbot_light       implementation="rot_z_only" show_rays="true" />
-        <colored_blob_omnidirectional_camera id="cam" implementation="rot_z_only" medium="leds" show_rays="true" />
+        <footbot_light       implementation="rot_z_only" show_rays="false" />
+        <colored_blob_omnidirectional_camera id="cam" implementation="rot_z_only" medium="leds" show_rays="false" />
       </sensors>
       <params>
         <wheel_turning hard_turn_angle_threshold="90"
@@ -40,7 +41,7 @@
                   gain="1000"
                   exponent="2" />
       </params>
-    </buzz_controller_footbot>
+    </footbot_gripping_controller>
 
   </controllers>
 
@@ -681,7 +682,6 @@
   <!-- ****************** -->
   <visualization>
     <qt-opengl>
-      <user_functions label="buzz_qt" />
       <camera>
         <placement idx="0"
                    position="0.251795,1.03178,0.515305"
