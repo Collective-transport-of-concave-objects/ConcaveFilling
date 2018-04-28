@@ -16,99 +16,82 @@
   <!-- *************** -->
   <controllers>
 
-    <buzz_controller_kheperaiv id="obsAvoid">
+    <footbot_gripping_controller id="CollectiveTransport"
+        library="controllers/footbot_gripping/libfootbot_gripping">>
       <actuators>
         <differential_steering implementation="default" />
+        <footbot_gripper       implementation="default" />
         <leds                  implementation="default" medium="leds" />
         <range_and_bearing     implementation="default" />
       </actuators>
       <sensors>
-        <kheperaiv_proximity implementation="default" show_rays="true" />
+        <footbot_proximity   implementation="default" show_rays="false" />
         <range_and_bearing   implementation="medium" medium="rab"
                              show_rays="true" noise_std_dev="0" />
         <positioning         implementation="default" />
+        <footbot_light       implementation="rot_z_only" show_rays="false" />
+        <colored_blob_omnidirectional_camera id="cam" implementation="rot_z_only" medium="leds" show_rays="false" />
       </sensors>
       <params>
         <wheel_turning hard_turn_angle_threshold="90"
                        soft_turn_angle_threshold="70"
                        no_turn_angle_threshold="10"
                        max_speed="10" />
+        <flocking target_distance="75"
+                  gain="1000"
+                  exponent="2" />
       </params>
-    </buzz_controller_kheperaiv>
+    </footbot_gripping_controller>
 
   </controllers>
 
   <!-- *********************** -->
   <!-- * Arena configuration * -->
   <!-- *********************** -->
-  <arena size="5, 5, 1" center="0,0,0.5">
+  <arena size="7, 5, 1" center="0,0,0.5">
 
-    <box id="wall_north" size="4,0.1,0.5" movable="false">
-      <body position="0,2,0" orientation="0,0,0" />
+    <light id="light"
+           position="-0.8,0.15,0.5"
+           orientation="0,0,0"
+           color="yellow"
+           intensity="5.0"
+           medium="light" />
+
+    <floor id="floor"
+          source="loop_functions"
+          pixels_per_meter="50" />
+
+    <box id="wall_north" size="6,0.1,0.5" movable="false">
+     <body position="0,2,0" orientation="0,0,0" />
     </box>
-    <box id="wall_south" size="4,0.1,0.5" movable="false">
-      <body position="0,-2,0" orientation="0,0,0" />
+    <box id="wall_south" size="6,0.1,0.5" movable="false">
+     <body position="0,-2,0" orientation="0,0,0" />
     </box>
     <box id="wall_east" size="0.1,4,0.5" movable="false">
-      <body position="2,0,0" orientation="0,0,0" />
+     <body position="3,0,0" orientation="0,0,0" />
     </box>
     <box id="wall_west" size="0.1,4,0.5" movable="false">
-      <body position="-2,0,0" orientation="0,0,0" />
+     <body position="-3,0,0" orientation="0,0,0" />
     </box>
 
-    <!--Concave object -->
-    <!-- <box id="side1" size="0.5,0.1,0.3" movable="false">
+    <!-- Shape defined  -->
+    <box id="side1" size="0.5,0.1,0.3" movable="false">
       <body position="-1,0.25,0" orientation="0,0,0" />
-    </box>
-    <box id="side2" size="0.5,0.1,0.3" movable="false">
-      <body position="-1,-0.25,0" orientation="0,0,0" />
     </box>
     <box id="side3" size="0.1,0.6,0.3" movable="false">
       <body position="-0.75,0,0" orientation="0,0,0" />
-    </box> -->
-
-    <!-- concave object - moon -->
-    <box id="side1" size="0.5,0.1,0.3" movable="false">
-      <body position="-0.65,0.5,0" orientation="60,0,0" />
-    </box>
-    <box id="side2" size="0.5,0.1,0.3" movable="false">
-      <body position="-0.65,-0.5,0" orientation="-60,0,0" />
-    </box>
-    <box id="side3" size="0.1,0.61,0.3" movable="false">
-      <body position="-0.77,0,0" orientation="0,0,0" />
     </box>
 
-    <!--
-        You can distribute entities randomly. Here, we distribute
-        10 foot-bots in this way:
-        - the position is uniformly distributed
-        on the ground, in the square whose corners are (-2,-2) and (2,2)
-        - the orientations are non-zero only when rotating around Z and chosen
-        from a gaussian distribution, whose mean is zero degrees and
-        standard deviation is 360 degrees.
-    -->
     <distribute>
       <position method="uniform" min="-2,-2,0" max="2,2,0" />
       <orientation method="gaussian" mean="0,0,0" std_dev="360,0,0" />
       <entity quantity="10" max_trials="100">
-        <kheperaiv id="kiv">
-          <controller config="obsAvoid" />
-        </kheperaiv>
+        <foot-bot id="fb" omnidirectional_camera_aperture="80">
+          <body position="1,0,0" orientation="0,0,0" />
+          <controller config="CollectiveTransport" />
+        </foot-bot>
       </entity>
     </distribute>
-
-
-    <!-- <distribute>
-      <position method="uniform" min="-2,-2,0" max="2,2,0" />
-      <orientation method="uniform" min="0,0,0" max="360,0,0" />
-      <entity quantity="1" max_trials="100">
-        <box id="b" size="0.3,0.3,0.2" movable="false" />
-      </entity>
-    </distribute> -->
-
-
-
-
 
   </arena>
 
@@ -125,6 +108,8 @@
   <media>
     <range_and_bearing id="rab" />
     <led id="leds" />
+    <led id="light" />
+    <led id="id_of_led_medium" />
   </media>
 
   <!-- ****************** -->
@@ -132,7 +117,12 @@
   <!-- ****************** -->
   <visualization>
     <qt-opengl>
-      <user_functions label="buzz_qt" />
+      <camera>
+        <placement idx="0"
+                   position="0.251795,1.03178,0.515305"
+                   look_at="0.233654,0.0876767,0.186165"
+                   lens_focal_length="20" />
+      </camera>
     </qt-opengl>
   </visualization>
 

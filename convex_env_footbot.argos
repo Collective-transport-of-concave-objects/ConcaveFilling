@@ -87,12 +87,8 @@
     </entity>
     </distribute>
 
-    <distribute>
-      <position method="uniform" min="-3,-3,0" max="3,3,0" />
-      <orientation method="uniform" min="0,0,0" max="360,0,0" />
-      <entity quantity="1" max_trials="100">
-        <box id="b" size="0.5,0.5,0.5" movable="true" mass="2">
-        <body position="-2.0,0,0.5" orientation="0,0,0" />
+        <box id="wall_wt" size="0.5,0.5,0.5" movable="true" mass="2">
+          <body position="-2,0,0" orientation="0,0,0" />
         <leds medium="id_of_led_medium">
           <led offset=" 0.25, 0.25,0.5" anchor="origin" color="blue" />
           <led offset=" 0.20, 0.25,0.5" anchor="origin" color="blue" />
@@ -399,7 +395,7 @@
           <led offset=" -0.25, 0.25,0.15" anchor="origin" color="blue" />
           <led offset=" -0.25, 0.25,0.10" anchor="origin" color="blue" />
           <led offset=" -0.25, 0.25,0.05" anchor="origin" color="blue" />
-          <!-- <> -->
+
           <led offset=" 0.25, 0.25,0.45" anchor="origin" color="blue" />
           <led offset=" 0.25, 0.25,0.40" anchor="origin" color="blue" />
           <led offset=" 0.25, 0.25,0.35" anchor="origin" color="blue" />
@@ -651,10 +647,8 @@
           <led offset=" 0.05,0.25,0.05" anchor="origin" color="blue" />
 
         </leds>
-      </box>
+      </box> -->
 
-      </entity>
-    </distribute>
     <!-- To use the cylinder as a grippable object, it is enough to
          set its 'movable' attribute to 'true', and define its
          mass (in kg).
@@ -663,16 +657,6 @@
       <body position="0.5,0,0" orientation="0,0,0" />
     </cylinder> -->
 
-<!--
-    <distribute>
-     <position method="uniform" min="4,4,0" max="5,5,0" />
-     <orientation method="gaussian" mean="0,0,0" std_dev="360,0,0" />
-     <entity quantity="0" max_trials="100">
-       <foot-bot id="fb" omnidirectional_camera_aperture="80" >
-         <controller config="CollectiveTransport" />
-       </foot-bot>
-     </entity>
-    </distribute> -->
    </arena>
   <!-- ******************* -->
   <!-- * Physics engines * -->
