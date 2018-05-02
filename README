@@ -8,7 +8,7 @@
 
 Open the terminal ( Ctrl + Alt + T).
 
-Clone the repository by typing the follwing command:
+Clone the repository by typing the following command:
 git clone  https://github.com/Collective-transport-of-concave-objects/ConcaveFilling.git
 
 Open the folder where you have cloned the repo and then the specific folder for any shape.
