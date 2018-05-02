@@ -3,3 +3,19 @@
 # The L-shape object folder contains 3 environments with 10,12 and 16 robots respectively.
 # The U-shape object folder contains 2 environments with different orientations of the shape.
 # Moon-shape object folder contains 1 environment of 20 robots.     
+
+#To run any of the environment, follow the instructions below.
+
+Open the terminal ( Ctrl + Alt + T).
+
+Clone the repository by typing the follwing command:
+git clone  https://github.com/Collective-transport-of-concave-objects/ConcaveFilling.git
+
+Open the folder where you have cloned the repo and then the specific folder for any shape.
+Open the terminal and type the following command:
+argos3 -c <argos_file_name.argos> 
+
+You shall now be able to see the environment in argos and a buzz editor on your screen.
+In the buzz editor, open the .bzz file for the specific argos file you have opened.
+
+Execute the script and click run on the argos environment.
