@@ -1,0 +1,346 @@
+
+### BUZZ FUNCTIONS ##
+
+# By Aishwary Jagetia
+# We need this for 2D vectors
+# Make sure you pass the correct include path to "bzzc -I <path1:path2> ..."
+include "/usr/local/share/buzz/include/vec2.bzz"
+
+# Scaling factor used for light intensity  
+C = 30
+# setting a 2D vector from length and angle
+function vec2_new_polar(length, angle) {
+   vec2 = {}
+	 vec2 = { .x = length * math.cos(angle),
+            .y = length * math.sin(angle)
+	 }
+   return vec2
+}
+ 
+# Summing two 2D vectors (v1 = v1 + v2)
+function vec2_sum(v1, v2) {
+   v1.x = v1.x + v2.x
+   v1.y = v1.y + v2.y
+	 return v1
+}
+ 
+# Multiplying two 2D vector with a constant (v1 = v1 * C)
+function vec2_multi(v1, C) {
+   v1.x = v1.x*C
+   v1.y = v1.y*C
+	 return v1
+}
+
+# x^2 + y^2
+function vec_mag(v1, v, C) {
+   s = math.sqrt((v1.x/size(v))^2+(v1.y/size(v))^2)
+	 return s
+}
+
+# Getting the angle of a 2D vector
+function vec2_angle(v) {
+   return math.atan(v.y, v.x)
+}
+
+# Check for object
+function goto_object(){
+	j = 0
+	P = {}
+	sum_P = vec2_new_polar(0,0)
+
+	while (j < 8){
+	P[j] = vec2_new_polar(proximity[j].value,proximity[j].angle)
+	sum_P = vec2_sum(P[j],sum_P)
+	j = j + 1
+	}
+	d = vec_mag(sum_P,P,C)
+
+	i = 0
+	V = {}
+	sum_V = vec2_new_polar(0,0)
+
+	while (i < 8){
+	V[i] = vec2_new_polar(light[i].value,light[i].angle)
+	sum_V = vec2_sum(V[i],sum_V)
+	i = i + 1
+	}
+	I = vec_mag(sum_V,V,C)
+#	log(I)
+	if (I != 0){
+		sum_V = vec2_multi(sum_V, C)
+  	goto(sum_V.x, sum_V.y)
+		log("Moving towards object")
+		
+		if ((I > 0.15)){
+			log("Reached to the object")
+			return 0.0
+		}
+
+		return 1.0
+	}
+	if (I == 0){
+		a = math.rng.uniform(5.0,15.0)
+		b = math.rng.uniform(1.0,20.0)
+		set_wheels(a,b)
+		log("Performing Ramdom Walk")
+		return 1.0
+	}
+}
+
+function angle_check(){
+	i = 0
+	j = 0
+	V = {}
+	sum_V = vec2_new_polar(0,0)
+
+	while (i < 8){
+	if (proximity[i].value > 0){
+		j = j + 1 
+	}
+	V[i] = vec2_new_polar(proximity[i].value,proximity[i].angle)
+	sum_V = vec2_sum(V[i],sum_V)
+	i = i + 1
+	}
+	# Calculating the angle and the length of the Net Vector
+	angle = vec2_angle(sum_V)
+	length = math.sqrt((sum_V.x)^2 + (sum_V.y)^2)
+	log(length)
+	thresh = 0.1
+
+	if (j >= 4){
+		set_leds(0,0,255)
+		log("Robot turning to Sudo Object")
+		set_wheels(0.0,0.0)
+		return 0
+	}
+	if (j < 1){
+		log("Going straight")
+		set_leds(255,0,0)
+		goto_object()
+	}
+    if ((j < 4) and (j >= 1)){
+        log("Robot Performing Left Hand Wall Rule")
+
+        if ((j == 3) and (proximity[0].value == 0.0) and (proximity[4].value == 0.0)){
+            set_wheels(lws*0.2,rws*0.2)
+        }
+        #if (j == 4){
+            #set_wheels(0.0,rws*0.1)
+        #}
+        # Minimum threshold is considered to be 0.01 for angle 0 degree
+        if ((length < 0.07) and (angle == 0)){
+        set_wheels(lws*0.2,rws*0.2)
+        }
+        if (length < 0.07){
+        set_wheels(lws*0.7,0.0)
+        }
+        if (length < 0.01){
+        set_wheels(lws,0.0)
+        }
+        # Conditions for 0 to -90 degrees
+        if ((length > 0.07) and (angle > -1.57) and (angle < 0.1)){
+        set_wheels(0.0,rws*0.1)
+        }
+        # Maintain the -90 distance 
+        if ((length > 0.07) and (angle > -1.80) and (angle < -1.40)){
+        set_wheels(lws*0.3,rws*0.3)
+        }   
+        # Maintain the turning distance 
+        if ((length > 0.07) and (angle > -3.15) and (angle < -1.90)){
+        set_wheels(lws*0.5,rws*0.1)
+        }   
+        # Maintain the -90 distance 
+        if ((length > 0.07) and (angle > 0.1) and (angle < 3.1)){
+        set_wheels(0.0,rws*0.2)
+        }    
+      return 1.0
+    }
+}
+
+function concave_filling(){
+		if (value != 0){
+			set_wheels(lws,-rws)
+			value = goto_object()
+		}
+		if (value == 0){
+			change = angle_check()
+			log(change)
+		}
+
+		log("I am in Swarm 1")
+
+		if ((change == 0) and (R < 10)){
+			change = 1
+			value = 1
+			R = R + 1
+			log(R)
+			#s1 = swarm.create(1)
+			#s1.select(id == R)
+			log("Process done!")
+		}
+}
+
+lws = 20.0
+rws = 20.0
+value = 1
+change = 1
+R = 0
+t = 0
+
+function init() {
+# Divide the swarm in 2 sub-swarms
+s1 = swarm.create(1)
+s1.select(id  == 0)
+
+s2 = swarm.create(2)
+s2.select(id == 1)
+
+s3 = swarm.create(3)
+s3.select(id == 2)
+
+s4 = swarm.create(4)
+s4.select(id == 3)
+
+s5 = swarm.create(5)
+s5.select(id == 4)
+
+s6 = swarm.create(6)
+s6.select(id == 5)
+
+s7 = swarm.create(7)
+s7.select(id == 6)
+
+s8 = swarm.create(8)
+s8.select(id == 7)
+
+s9 = swarm.create(9)
+s9.select(id == 8)
+
+s10 = swarm.create(10)
+s10.select(id == 9)
+
+s11 = swarm.create(11)
+s11.select(id  == 10)
+
+s12 = swarm.create(12)
+s12.select(id == 11)
+
+s13 = swarm.create(13)
+s13.select(id == 12)
+
+s14 = swarm.create(14)
+s14.select(id == 13)
+
+s15 = swarm.create(15)
+s15.select(id == 14)
+
+s16 = swarm.create(16)
+s16.select(id == 15)
+
+#s17 = swarm.create(17)
+#s17.select(id == 16)
+
+#s18 = swarm.create(18)
+#s18.select(id == 17)
+
+#s19 = swarm.create(19)
+#s19.select(id == 18)
+
+#s20 = swarm.create(20)
+#s20.select(id == 19)
+
+}
+   
+# Executed every time step
+function step() {
+t = t+1
+
+s2.exec(concave_filling)
+
+if(t > 200) {
+s4.exec(concave_filling)
+}
+
+if(t > 400) {
+s6.exec(concave_filling)
+}
+
+if(t > 600) {
+s8.exec(concave_filling)
+}
+
+if(t > 800) {
+s10.exec(concave_filling)
+}
+
+if(t > 1000) {
+s12.exec(concave_filling)
+}
+
+if(t > 1200) {
+s14.exec(concave_filling)
+}
+
+if(t > 1400) {
+s16.exec(concave_filling)
+}
+
+if(t > 1600) {
+s1.exec(concave_filling)
+}
+
+if(t > 1800) {
+s3.exec(concave_filling)
+}
+
+if(t > 2000) {
+s5.exec(concave_filling)
+}
+
+if(t > 2200) {
+s7.exec(concave_filling)
+}
+
+if(t > 2400) {
+s9.exec(concave_filling)
+}
+
+if(t > 2600) {
+s11.exec(concave_filling)
+}
+
+if(t > 2800) {
+s13.exec(concave_filling)
+}
+
+if(t > 3000) {
+s15.exec(concave_filling)
+}
+
+#if(t > 3200) {
+#s17.exec(concave_filling)
+#}
+
+#if(t > 3400) {
+#s18.exec(concave_filling)
+#}
+
+#if(t > 3600) {
+#s19.exec(concave_filling)
+#}
+
+#if(t > 3800) {
+#s20.exec(concave_filling)
+#}
+
+}
+
+}
+
+function reset() {
+}
+     
+# Execute at exit
+function destroy() {
+}
+

@@ -1,8 +1,5 @@
-# movable = true
-# mass of the object defined
-# No cylinder
-# One object (box) 
-# LEd's on object
-# Foot bots
-# Light source 
+# The folder contains 3 files for different concave environments, namely L-shape, U-shape and Moon shape.
 
+# The L-shape object folder contains 3 environments with 10,12 and 16 robots respectively.
+# The U-shape object folder contains 2 environments with different orientations of the shape.
+# Moon-shape object folder contains 1 environment of 20 robots.     
